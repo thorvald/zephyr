@@ -87,6 +87,16 @@
 &gpio {
 	location-swo = <0>;
 	status = "okay";
+
+/*
+	wfx@0 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		status = "ok";
+		reg = <0x0>;
+		compatible = "silabs,wfx";
+	};
+*/
 };
 
 &gpioa {
@@ -158,4 +168,12 @@
 
 &systick {
         status = "disabled";
+};
+
+&trng0 {
+	status = "okay";
+};
+
+&cpu0 {
+        clock-frequency = <72000000>;
 };

@@ -12,6 +12,7 @@
 
 / {
 	chosen {
+		zephyr,entropy = &trng0;
 		zephyr,flash-controller = &msc;
 	};
 
@@ -19,7 +20,7 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		cpu@0 {
+		cpu0: cpu@0 {
 			compatible = "arm,cortex-m4f";
 			reg = <0>;
 		};
@@ -286,6 +287,15 @@
 				label = "GPIO_I";
 				gpio-controller;
 				#gpio-cells = <2>;
+				status = "disabled";
+			};
+
+
+			trng0: trng@4001d000 {
+				compatible = "silabs,gecko-trng";
+				reg = <0x4001d000 0x400>;
+				interrupts = <49 0>;
+				label = "TRNG0";
 				status = "disabled";
 			};
 		};

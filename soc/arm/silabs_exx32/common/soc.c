@@ -136,7 +136,22 @@ static ALWAYS_INLINE void dcdc_init(void)
 #if defined(CONFIG_SOC_GECKO_EMU_DCDC_MODE_UNCONFIGURED)
 	/* Nothing to do, leave DC/DC converter in unconfigured, safe state. */
 #elif defined(CONFIG_SOC_GECKO_EMU_DCDC_MODE_ON) || defined(CONFIG_SOC_GECKO_EMU_DCDC_MODE_BYPASS)
-	EMU_DCDCInit_TypeDef init_cfg = EMU_DCDCINIT_DEFAULT;
+
+//	EMU_DCDCInit_TypeDef init_cfg = EMU_DCDCINIT_DEFAULT;
+	EMU_DCDCInit_TypeDef init_cfg = {
+    emuPowerConfig_DcdcToDvdd,   /* DCDC to DVDD. */                                 \
+    emuDcdcMode_LowNoise,        /* Low-noise mode in EM0. */                        \
+    1800,                        /* Nominal output voltage for DVDD mode, 1.8V.  */  \
+    5,                           /* Nominal EM0/1 load current of less than 5mA. */  \
+    10,                          /* Nominal EM2/3/4 load current less than 10uA.  */ \
+    200,                         /* Maximum average current of 200mA
+                                    (assume strong battery or other power source). */ \
+    emuDcdcAnaPeripheralPower_AVDD,/* Select AVDD as analog power supply). */         \
+    emuDcdcLnHighEfficiency,     /* Use high-efficiency mode. */                      \
+    emuDcdcLnCompCtrl_4u7F,      /* 4.7uF DCDC capacitor. */                          \
+
+	};
+
 #if defined(CONFIG_SOC_GECKO_EMU_DCDC_MODE_BYPASS)
 	init_cfg.dcdcMode = emuDcdcMode_Bypass;
 #endif

@@ -21,6 +21,8 @@ manifest:
   remotes:
     - name: upstream
       url-base: https://github.com/zephyrproject-rtos
+    - name: origin
+      url-base: https://github.com/thorvald
 
   #
   # Please add items below based on alphabetical order
@@ -68,7 +70,8 @@ manifest:
       revision: a1ec761014740a08699720298dd37ad4da360840
       path: modules/hal/microchip
     - name: hal_silabs
-      revision: 69c3e1e6e167767cb75aa2b468df4ade05988cdb
+      remote: origin
+      revision: 86e81b4f531f96714dff9472a741fd0a59f742b6
       path: modules/hal/silabs
     - name: hal_st
       revision: 5b3ec3e182d4310e8943cc34c6c70ae57d9711da

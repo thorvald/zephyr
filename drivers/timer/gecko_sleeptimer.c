@@ -9,6 +9,7 @@
 #include <drivers/timer/system_timer.h>
 #include <sl_sleeptimer.h>
 #include <em_cmu.h>
+#include <em_core.h>
 
 #ifndef CONFIG_GECKO_SLEEPTIMER_ULFRCO
 #ifdef CONFIG_SYS_POWER_SLEEP_STATES
@@ -79,7 +80,7 @@ static void gecko_sleeptimer_callback(sl_sleeptimer_timer_handle_t *handle, void
 
 	uint64_t count = sl_sleeptimer_get_tick_count64();
 	uint32_t dticks = TIMER_TO_TICKS(count - last_count);
-
+	
 	if (dticks > 0) {
 		tick_count += dticks;
 		last_count = TICKS_TO_TIMER(tick_count - 1);
@@ -89,13 +90,17 @@ static void gecko_sleeptimer_callback(sl_sleeptimer_timer_handle_t *handle, void
 
 void gecko_sleeptimer_isr(const void *arg)
 {
-	ARG_UNUSED(arg);
+	uint32_t key;
 
+	ARG_UNUSED(arg);
+	
+	key = irq_lock();
 #ifdef CONFIG_GECKO_SLEEPTIMER_RTCC
 	RTCC_IRQHandler();
 #else
 	RTC_IRQHandler();
 #endif
+	irq_unlock(key);
 }
 
 int z_clock_driver_init(const struct device *device)
@@ -152,13 +157,13 @@ void z_clock_set_timeout(int32_t ticks, bool idle)
 {
 #ifdef CONFIG_TICKLESS_KERNEL
 	ARG_UNUSED(idle);
-
-	if (ticks == K_TICKS_FOREVER || ticks == INT_MAX) {
+	
+	if ((ticks == K_TICKS_FOREVER) || (ticks == INT_MAX)) {
 		sl_sleeptimer_stop_timer(&timer_handle);
 		unblock_em3();
 	} else {
 		sl_status_t status;
-		uint64_t counts = TICKS_TO_TIMER(ticks);
+		uint64_t counts = TICKS_TO_TIMER(MAX(ticks,1));
 		block_em3();
 
 		status = sl_sleeptimer_restart_timer(&timer_handle,

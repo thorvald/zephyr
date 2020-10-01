@@ -13,6 +13,9 @@ config BOARD
 config CMU_HFXO_FREQ
 	default 50000000
 
+config CMU_HFRCO_FREQ
+	default 72000000
+
 config CMU_LFXO_FREQ
 	default 32768
 
@@ -23,13 +26,22 @@ config COUNTER_GECKO_RTCC
 config LEUART_GECKO
 	default n
 
+config HEAP_MEM_POOL_SIZE
+	default 8192
+
 if NETWORKING
 
-config NET_L2_ETHERNET
+config NET_L2_WIFI_MGMT
 	default y
 
-config ETH_GECKO
-	default y if NET_L2_ETHERNET
+config WIFI
+	default y
+
+config WIFI_WFX
+	default y
+
+config WIFI_OFFLOAD
+	default y
 
 endif # NETWORKING
 
@@ -41,5 +53,9 @@ config SYS_PM_MIN_RESIDENCY_SLEEP_2
 
 config SYS_PM_MIN_RESIDENCY_SLEEP_3
         default 1
+
+config LOG_BACKEND_SWO_FREQ_HZ
+        default 875000
+        depends on LOG_BACKEND_SWO
 
 endif # BOARD_EFM32GG_SLWSTK6121A

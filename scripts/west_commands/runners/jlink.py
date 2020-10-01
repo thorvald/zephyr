@@ -147,6 +147,7 @@ class JLinkBinaryRunner(ZephyrBinaryRunner):
                        '-if', self.iface,
                        '-speed', self.speed,
                        '-device', self.device,
+
                        '-silent',
                        '-singlerun'] +
                       self.tool_opt)
@@ -224,6 +225,7 @@ class JLinkBinaryRunner(ZephyrBinaryRunner):
                    ['-if', self.iface,
                     '-speed', self.speed,
                     '-device', self.device,
+#                       '-ip', '172.20.235.23',
                     '-CommanderScript', fname] +
                    self.tool_opt)
 

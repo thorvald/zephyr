@@ -15,6 +15,10 @@
 #include <net/net_mgmt.h>
 #include <net/wifi.h>
 
+#ifdef CONFIG_NET_L2_ETHERNET
+#include <net/ethernet.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -120,8 +124,11 @@ struct net_wifi_mgmt_offload {
 	 * net_if_api structure. So we make current structure pointer
 	 * that can be casted to a net_if_api structure pointer.
 	 */
+#ifdef CONFIG_NET_L2_ETHERNET
+	struct ethernet_api ethernet;
+#else
 	struct net_if_api iface_api;
-
+#endif
 	/* cb parameter is the cb that should be called for each
 	 * result by the driver. The wifi mgmt part will take care of
 	 * raising the necessary event etc...
@@ -138,7 +145,11 @@ struct net_wifi_mgmt_offload {
 /* Make sure that the network interface API is properly setup inside
  * Wifi mgmt offload API struct (it is the first one).
  */
+#ifdef CONFIG_NET_L2_ETHERNET
+BUILD_ASSERT(offsetof(struct net_wifi_mgmt_offload, ethernet) == 0);
+#else
 BUILD_ASSERT(offsetof(struct net_wifi_mgmt_offload, iface_api) == 0);
+#endif
 
 #ifdef CONFIG_WIFI_OFFLOAD
 

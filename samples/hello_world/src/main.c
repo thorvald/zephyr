@@ -9,5 +9,6 @@
 
 void main(void)
 {
+//	EMU_DCDCPowerOff();
 	printk("Hello World! %s\n", CONFIG_BOARD);
 }
